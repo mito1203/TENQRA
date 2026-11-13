@@ -1,0 +1,7 @@
+Japan prefecture administrative boundaries (47 prefectures)
+Source: 国土交通省 国土数値情報「行政区域データ」 (N03), data basis 2026.
+Source information: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2026.html
+Upstream processed GeoJSON used for extraction: https://geo.maderaojen.me/datasets/jp-prefectures/releases/v1/2026-08-04.1/data.geojson
+Attribution: 国土交通省「国土数値情報（行政区域データ）」を加工して作成。
+License: 国土数値情報 利用約款 (CC BY 4.0 相当; see the source page for applicable terms).
+Coordinates rounded to 5 decimal places for web delivery. Geometry rendered as prefecture boundary strokes.

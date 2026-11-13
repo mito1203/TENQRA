@@ -1,13 +1,13 @@
 # TENQRA
 
-## Pages setup
+日本の地震情報と震度分布のアーカイブ、震度・津波シミュレーターを提供する静的サイトです。
 
-This repository contains a static site. The default page is the Japan earthquake live monitor. The simulation remains available at `simulation.html`.
+- トップ / リアルタイムモニター: [index.html](./index.html)
+- リアルタイムモニター: [live.html](./live.html)
+- シミュレーション: [simulation.html](./simulation.html)
 
-1. Open **Settings → Pages**.
-2. Under **Build and deployment**, select **GitHub Actions** as the source.
-3. The workflow deploys automatically on pushes to `main`.
+## GitHub Pages
 
-The resulting site URL is `https://mito1203.github.io/TENQRA/`.
+GitHub の Settings → Pages → Build and deployment で GitHub Actions を選ぶと、main への更新時に公開できます。
 
-If this private repository is on GitHub Free, Pages is not available for it. GitHub Pages supports private repositories on Pro, Team, and Enterprise plans; Pages sites are public on the internet. Keep this in mind before changing the repository visibility.
+公開URL: https://mito1203.github.io/TENQRA/
