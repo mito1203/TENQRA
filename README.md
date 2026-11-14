@@ -10,7 +10,3 @@
 ## 公開サイト
 
 https://mito1203.github.io/TENQRA/
-
-## GitHub Pages
-
-GitHub リポジトリの Settings → Pages → Build and deployment で GitHub Actions を選択すると、`main` ブランチへの更新を公開できます。
