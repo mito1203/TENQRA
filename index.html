@@ -96,6 +96,31 @@ h2{font-size:22px;margin:0 0 6px;line-height:1.4}
 @media(max-width:900px){.hero{grid-template-columns:1fr}.scope{border-left:0;border-top:1px solid #1d3a55;min-height:340px}.hero-copy{padding:34px 26px}.features,.notes{grid-template-columns:1fr}}
 @media(max-width:560px){.wrap{padding-left:14px;padding-right:14px}.wordmark{font-size:20px}.logo{width:44px;height:44px}.logo svg{width:32px;height:32px}.nav a{padding:7px 11px;font-size:12px}.row{grid-template-columns:70px 46px minmax(0,1fr) auto;gap:8px;padding:11px 12px;font-size:13px}.card{padding:22px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+/* TENQRA Glassmorphism Visual */
+.brand-visual {
+  max-width: 1180px;
+  margin: 0 auto 28px;
+  overflow: hidden;
+  border: 1px solid rgba(120, 195, 255, .22);
+  border-radius: 22px;
+  background: rgba(15, 35, 60, .28);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, .25),
+    0 0 35px rgba(65, 170, 255, .10);
+}
+
+.brand-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 560px) {
+  .brand-visual {
+    border-radius: 14px;
+    margin-bottom: 18px;
+  }
+}
 </style>
 </head>
 <body>
@@ -109,6 +134,14 @@ h2{font-size:22px;margin:0 0 6px;line-height:1.4}
 </header>
 
 <main>
+<section class="brand-visual" aria-label="TENQRA">
+  <img
+    src="assets/tenqra-glass.png"
+    alt="TENQRA 日本の地震情報プラットフォーム"
+    width="1648"
+    height="928"
+  >
+</section>
 <section class="hero" aria-labelledby="title">
   <div class="hero-copy">
     <h1 id="title">日本の揺れを、いま見て、試して、知る。</h1>
@@ -180,7 +213,18 @@ const SUP={45:'5<sup>−</sup>',46:'5<sup>−</sup>',50:'5<sup>+</sup>',55:'6<su
 function col(s){return s>=70?'#762be3':s>=60?'#d63286':s>=55?'#e7493f':s>=50?'#f47727':s>=45?'#c98a12':s>=40?'#b89c1d':s>=30?'#1f9b66':s>=20?'#2a8fb0':s>=10?'#2f9fcf':'#4b6277'}
 function mark(s){return SUP[s]||LAB[s]||'—'}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function parse(v){const m=String(v||'').match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})\s+(\d{1,2}):(\d{2})/);return m?{mo:+m[2],d:+m[3],h:m[4].padStart(2,'0'),mi:m[5]}:null}
+function parse(v) {
+  const m = String(v || '').match(
+    /^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})\s+(\d{1,2}):(\d{2})/
+  );
+
+  return m ? {
+    mo: +m[2],
+    d: +m[3],
+    h: m[4].padStart(2, '0'),
+    mi: m[5]
+  } : null;
+}
 function norm(f){
   if(!f||f.code!==551)return null;
   const q=f.earthquake||{},h=q.hypocenter||{},t=parse(q.time);
