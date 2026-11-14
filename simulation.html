@@ -195,7 +195,7 @@ a{color:#8bdfff}
 .map-wrap{
   background:
     radial-gradient(ellipse at 52% 45%,rgba(24,91,124,.30),transparent 62%),
-    linear-gradient(180deg,#071725 0%,#06111e 100%);
+    linear-gradient(180deg,#06111d 0%,#040d17 100%);
   border-top:1px solid #24435b;
 }
 #worldmap,.leaflet-container{background:transparent!important}
@@ -418,11 +418,11 @@ go(true);
   const mapEl=document.getElementById('worldmap');
   const map=L.map(mapEl,{worldCopyJump:true,zoomSnap:.25,zoomDelta:.5,scrollWheelZoom:true,preferCanvas:true,maxBounds:[[-86,-360],[86,360]],maxBoundsViscosity:.55,zoomControl:true,attributionControl:true});
   if(window.SEISMO_WORLD_LITE&&window.SEISMO_WORLD_LITE.features){
-    L.geoJSON(window.SEISMO_WORLD_LITE,{interactive:false,smoothFactor:.35,style:()=>({color:'#6fa9c2',weight:.9,opacity:.88,fillColor:'#15364d',fillOpacity:1})}).addTo(map);
+    L.geoJSON(window.SEISMO_WORLD_LITE,{interactive:false,smoothFactor:.35,style:()=>({color:'#8bc5dc',weight:.95,opacity:.94,fillColor:'#1d526b',fillOpacity:1,lineJoin:'round'})}).addTo(map);
   }else{
     showStatus('世界地図データを読み込めませんでした。assets/world-lite.js の配置を確認してください。');
   }
-  L.geoJSON(window.SEISMO_PREFECTURES,{interactive:false,smoothFactor:.15,style:()=>({color:'#b5e6f4',weight:.75,opacity:.78,fill:false})}).addTo(map);
+  L.geoJSON(window.SEISMO_PREFECTURES,{interactive:false,smoothFactor:.15,style:()=>({color:'#c0e9f5',weight:.72,opacity:.82,fill:false,lineJoin:'round'})}).addTo(map);
   const graticule=L.layerGroup();for(let lat=-60;lat<=60;lat+=30)L.polyline([[lat,-180],[lat,180]],{color:'#264151',weight:.55,opacity:.62,interactive:false}).addTo(graticule);for(let lon=-150;lon<=180;lon+=30)L.polyline([[-80,lon],[80,lon]],{color:'#264151',weight:.55,opacity:.62,interactive:false}).addTo(graticule);graticule.addTo(map);
   map.attributionControl.setPrefix('<a href="https://www.naturalearthdata.com/">Natural Earth 1:10m (Public Domain)</a> · <a href="https://leafletjs.com/">Leaflet</a>');map.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2026.html">国土交通省 国土数値情報（行政区域データ）</a>');
   L.control.scale({imperial:false,position:'bottomright',maxWidth:110}).addTo(map);
