@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mito1203.github.io/TENQRA/sitemap.xml
