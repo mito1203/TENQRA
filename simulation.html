@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#07111d"><meta name="description" content="TENQRA SIMULATORは、世界地図上で日本周辺の震度や津波の広がりをシミュレーションできる学習用ツールです。">
+<meta name="theme-color" content="#07111d"><meta name="description" content="世界地図を拡大・移動しながら、日本周辺の震度・津波シミュレーションを確認できる学習用ツール。">
 <title>TENQRA SIMULATOR — 震度・津波シミュレーター</title>
 <link rel="stylesheet" href="assets/leaflet.css">
 <style>
@@ -12,7 +12,71 @@
 @media(max-width:980px){.grid{grid-template-columns:minmax(0,1fr) minmax(310px,.8fr)}.shell{padding:16px}.map-wrap{height:62vh;min-height:430px}}
 @media(max-width:720px){.shell{padding:12px 10px 20px}.header{margin-bottom:12px}.header h1{font-size:20px}.brand-icon{width:40px;height:40px}.status-pill{display:none}.status-pill.live-link{display:inline-block}.grid{display:flex;flex-direction:column}.map-panel{width:100%;order:0}.rail{display:contents}.controls-panel{order:1}.scenario.alert{order:2}.scenario.video{order:3}.max-card{order:4}.tsunami-panel{order:5}.model-panel{order:6}.map-wrap{height:60vh;min-height:390px;max-height:600px}.map-head{padding:11px}.map-footer{font-size:9px;display:block}.panel{padding:13px}.big{font-size:42px}.map-legend{bottom:26px;max-width:190px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
-@media(min-width:721px){.grid{grid-template-columns:minmax(0,1fr);gap:16px}.map-wrap{height:min(58vh,650px);min-height:480px}.rail{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.max-card{grid-column:1/-1}.max-card .group-list{grid-template-columns:repeat(3,minmax(0,1fr))}.scenario.video{grid-column:1/-1}}</style>
+@media(min-width:721px){.grid{grid-template-columns:minmax(0,1fr);gap:16px}.map-wrap{height:min(58vh,650px);min-height:480px}.rail{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.max-card{grid-column:1/-1}.max-card .group-list{grid-template-columns:repeat(3,minmax(0,1fr))}.scenario.video{grid-column:1/-1}}
+/* TENQRA visual system — presentation only */
+:root{
+ --bg:#050b15;--panel:#0c1726;--panel2:#102238;--edge:#1d3a55;
+ --text:#edf7ff;--muted:#8fa9bf;--cyan:#68d9ff;
+ --shadow:0 18px 55px #0008;
+}
+html{background:#050b15}
+body{
+ background:
+  radial-gradient(ellipse 760px 360px at 50% -210px,#14528a66,transparent 72%),
+  radial-gradient(ellipse 500px 300px at 100% 0,#123d6940,transparent 70%),
+  #050b15;
+}
+.shell{padding-top:24px}
+.top,.header{
+ position:relative;isolation:isolate;padding:18px 21px;
+ border:1px solid #285276;border-radius:19px;margin-bottom:18px;
+ background:linear-gradient(112deg,#0a1b2d 0%,#091522 55%,#0b1c30 100%);
+ box-shadow:0 14px 45px #0007,inset 0 1px #8edfff18;overflow:hidden;
+}
+.top:before,.header:before{
+ content:"";position:absolute;z-index:-1;inset:0;
+ background:radial-gradient(ellipse at 15% 50%,#1479b52b,transparent 48%);
+}
+.top:after,.header:after{
+ content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:1px;
+ background:linear-gradient(90deg,transparent,#55cfff,#b9f4ff,#55cfff,transparent);
+}
+.brand{gap:15px}
+.logo,.brand-icon{
+ border-color:#4ba7d0!important;
+ background:radial-gradient(circle at 35% 25%,#1b4d70,#081522 72%)!important;
+ box-shadow:0 0 24px #2eaaff35,inset 0 0 16px #3cbbff20!important;
+}
+.logo svg,.brand-icon svg{overflow:visible}
+.logo circle,.brand-icon circle{stroke:#55cfff!important}
+.logo path,.brand-icon path{stroke:#d7faff!important}
+.eyebrow{color:#8fb8d0!important;letter-spacing:.22em!important}
+.top h1,.header h1{color:#f1fbff;letter-spacing:.035em}
+.subtitle,.tagline{color:#91aabd!important}
+.nav a,.status-pill,.official-monitor{
+ border-color:#315a78!important;background:#071726!important;color:#bdeaff!important;
+ box-shadow:inset 0 1px #ffffff08,0 0 18px #1c8ac01c;
+}
+.nav a.active{background:#12334a!important;border-color:#65cfff!important;color:#e5faff!important}
+.card,.panel,.map-panel{
+ border-color:#203d57!important;
+ background:linear-gradient(150deg,rgba(13,28,45,.98),rgba(7,17,30,.99))!important;
+ box-shadow:0 15px 42px #0006,inset 0 1px #b7e9ff08!important;
+}
+.map-head,.section-head{background:linear-gradient(90deg,#10263b,#0b1c2e);border-bottom-color:#23435d!important}
+button{
+ border-color:#315570!important;background:#0a1c2c!important;color:#d1edfb!important;
+}
+button:hover{background:#12324b!important;border-color:#63cfff!important}
+input[type=range],input[type=checkbox]{accent-color:#68d9ff}
+a{color:#8bdfff}
+@media(max-width:720px){
+ .top,.header{padding:13px;border-radius:15px}
+ .brand{gap:11px}
+}
+
+</style>
+<link rel="icon" type="image/svg+xml" href="assets/tenqra-icon.svg">
 </head>
 <body>
 <div class="shell"><header class="header"><div class="brand"><div class="brand-icon" aria-hidden="true"><svg viewBox="0 0 48 48" role="presentation"><circle cx="24" cy="24" r="19"/><path d="M6 25h10l4-11 8 21 5-11h9"/></svg></div><div><div class="eyebrow">TENQRA　/　JAPAN EARTHQUAKE LAB</div><h1>震度・津波シミュレーター</h1><p class="tagline">世界地図で見る、日本周辺の揺れと津波の伝播</p></div></div><div style="display:flex;align-items:center;gap:8px"><a class="status-pill live-link" href="live.html" style="text-decoration:none">● LIVE 地震モニター</a><div class="status-pill"><i></i>SCENARIO SIMULATOR</div></div></header>
