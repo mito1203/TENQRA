@@ -122,7 +122,7 @@ const TSUNAMI_FEED='https://api.p2pquake.net/v2/history?codes=552&limit=20';
 const ARCHIVE_LIMIT=100,REFRESH_MS=1000,DAY_REFRESH_MS=300000,TSUNAMI_REFRESH_MS=15000,CACHE_KEY='seismo-live-japan-cache-v3';
 const $=id=>document.getElementById(id);
 const state={features:[],liveFeatures:[],dayFeatures:[],historyFeatures:[],historyOffset:null,historyDone:false,historyInFlight:false,liveConnected:false,visible:[],archive:[],index:0,activeKey:null,playing:false,timer:null,wavePlaying:false,waveTimer:null,waveStartAt:0,waveDuration:20,waveTime:0,stationMarkers:[],waveCircles:null,liveInFlight:false,liveSignature:'',lastGenerated:null,toastTimer:null,epicenterLayer:null,stationLayer:null,waveLayer:null};
-const quakeMap=L.map('archiveMap',{zoomControl:true,attributionControl:true,scrollWheelZoom:false,preferCanvas:true,minZoom:2,maxZoom:9,zoomSnap:.5,maxBoundsViscosity:.72});
+const quakeMap=L.map('archiveMap',{zoomControl:true,attributionControl:true,scrollWheelZoom:true,preferCanvas:true,minZoom:2,maxZoom:9,zoomSnap:.5,maxBoundsViscosity:.72});
 L.geoJSON(window.SEISMO_WORLD,{interactive:false,smoothFactor:.08,style:()=>({color:'#9bb9c4',weight:.8,opacity:.8,fillColor:'#203d4e',fillOpacity:.98})}).addTo(quakeMap);
 L.geoJSON(window.SEISMO_PREFECTURES,{interactive:false,smoothFactor:.12,style:()=>({color:'#b2d0d8',weight:.58,opacity:.78,fill:false})}).addTo(quakeMap);
 quakeMap.attributionControl.setPrefix('<a href="https://www.naturalearthdata.com/">Natural Earth</a>');quakeMap.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2026.html">国土交通省 国土数値情報（行政区域データ）</a>');
