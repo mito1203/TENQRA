@@ -1,13 +1,16 @@
 # TENQRA
 
-日本の地震情報と震度分布のアーカイブ、震度・津波シミュレーターを提供する静的サイトです。
+**TENQRA** は、日本の地震情報や震度分布のアーカイブ、震度・津波シミュレーションを提供する地震情報プラットフォームです。
 
-- トップ / リアルタイムモニター: [index.html](./index.html)
-- リアルタイムモニター: [live.html](./live.html)
-- シミュレーション: [simulation.html](./simulation.html)
+## コンテンツ
+
+- **震度・津波シミュレーター**：[simulation / index](./index.html)
+- **リアルタイム地震モニター**：[TENQRA LIVE](./live.html)
+
+## 公開サイト
+
+https://mito1203.github.io/TENQRA/
 
 ## GitHub Pages
 
-GitHub の Settings → Pages → Build and deployment で GitHub Actions を選ぶと、main への更新時に公開できます。
-
-公開URL: https://mito1203.github.io/TENQRA/
+GitHub リポジトリの Settings → Pages → Build and deployment で GitHub Actions を選択すると、`main` ブランチへの更新を公開できます。
