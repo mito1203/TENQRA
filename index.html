@@ -12,10 +12,107 @@
 @media(max-width:980px){.grid{grid-template-columns:minmax(0,1fr) minmax(310px,.8fr)}.shell{padding:16px}.map-wrap{height:62vh;min-height:430px}}
 @media(max-width:720px){.shell{padding:12px 10px 20px}.header{margin-bottom:12px}.header h1{font-size:20px}.brand-icon{width:40px;height:40px}.status-pill{display:none}.status-pill.live-link{display:inline-block}.grid{display:flex;flex-direction:column}.map-panel{width:100%;order:0}.rail{display:contents}.controls-panel{order:1}.scenario.alert{order:2}.scenario.video{order:3}.max-card{order:4}.tsunami-panel{order:5}.model-panel{order:6}.map-wrap{height:60vh;min-height:390px;max-height:600px}.map-head{padding:11px}.map-footer{font-size:9px;display:block}.panel{padding:13px}.big{font-size:42px}.map-legend{bottom:26px;max-width:190px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
-@media(min-width:721px){.grid{grid-template-columns:minmax(0,1fr);gap:16px}.map-wrap{height:min(58vh,650px);min-height:480px}.rail{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.max-card{grid-column:1/-1}.max-card .group-list{grid-template-columns:repeat(3,minmax(0,1fr))}.scenario.video{grid-column:1/-1}}</style>
+@media(min-width:721px){.grid{grid-template-columns:minmax(0,1fr);gap:16px}.map-wrap{height:min(58vh,650px);min-height:480px}.rail{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.max-card{grid-column:1/-1}.max-card .group-list{grid-template-columns:repeat(3,minmax(0,1fr))}.scenario.video{grid-column:1/-1}}
+/* TENQRA identity refresh — keeps the existing simulator and its controls intact */
+:root{
+ --bg:#050b15;--panel:#0c1726;--panel2:#102238;--edge:#1d3a55;
+ --text:#edf7ff;--muted:#8fa9bf;--cyan:#68d9ff;--shadow:0 18px 55px #0008;--r:17px
+}
+body{
+ background:
+  radial-gradient(ellipse 700px 330px at 50% -190px,#14528a66,transparent 72%),
+  radial-gradient(ellipse 480px 260px at 100% 0,#123d6940,transparent 70%),
+  #050b15;
+}
+.shell{max-width:1600px;padding-top:24px}
+.header{
+ position:relative;isolation:isolate;min-height:112px;padding:19px 22px;
+ border:1px solid #285276;border-radius:20px;margin-bottom:18px;
+ background:linear-gradient(112deg,#0a1b2d 0%,#091522 55%,#0b1c30 100%);
+ box-shadow:0 14px 45px #0007,inset 0 1px #8edfff18;
+ overflow:hidden;
+}
+.header:before{
+ content:"";position:absolute;z-index:-1;inset:0;
+ background:radial-gradient(ellipse at 15% 50%,#1479b52b,transparent 48%),
+ linear-gradient(90deg,transparent 0%,#4acbff08 55%,transparent 100%);
+}
+.header:after{
+ content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:1px;
+ background:linear-gradient(90deg,transparent,#55cfff,#b9f4ff,#55cfff,transparent);
+ opacity:.8;
+}
+.brand{gap:16px}
+.brand-icon{
+ width:66px;height:66px;border-radius:50%;color:#d7faff;
+ background:radial-gradient(circle at 35% 25%,#1b4d70,#081522 72%);
+ border:1px solid #4ba7d0;box-shadow:0 0 24px #2eaaff35,inset 0 0 16px #3cbbff20;
+}
+.brand-icon svg{width:57px;height:57px;overflow:visible}
+.brand-icon circle{stroke:#55cfff;stroke-width:1.2}
+.brand-icon path{stroke:currentColor;stroke-width:2.1}
+.brand-wordmark{
+ font-size:29px;font-weight:900;letter-spacing:.18em;line-height:1.05;
+ color:#f1fbff;text-shadow:0 0 18px #55cfff55;
+}
+.brand-wordmark span{font-size:9px;vertical-align:top;letter-spacing:0;color:#8bbbd4;margin-left:3px}
+.brand-caption{font-size:8px;letter-spacing:.27em;color:#8fb8d0;margin-top:5px;font-weight:700}
+.brand-page-title{font-size:16px;font-weight:800;letter-spacing:.04em;margin-top:9px;color:#e7f5ff}
+.header h1{display:none}
+.tagline{font-size:10px;color:#91aabd;margin:2px 0 0}
+.status-pill{
+ border-color:#2c6385;background:#071726;color:#b8dff2;
+ box-shadow:inset 0 1px #ffffff08,0 0 18px #1c8ac01c;
+}
+.status-pill i{background:#62e7ff;box-shadow:0 0 12px #62e7ff}
+a.status-pill{color:#bdeaff}
+.map-panel,.panel{
+ border-color:#203d57;
+ background:linear-gradient(150deg,rgba(13,28,45,.98),rgba(7,17,30,.99));
+ box-shadow:0 15px 42px #0006,inset 0 1px #b7e9ff08;
+}
+.map-head{background:linear-gradient(90deg,#10263b,#0b1c2e);border-bottom-color:#23435d}
+.map-title{color:#dff5ff;letter-spacing:.14em}
+.map-sub{color:#8daec2}
+.map-wrap{background:#061321}
+.map-status,.map-legend{
+ border-color:#31516b;background:rgba(5,15,27,.9);box-shadow:0 5px 20px #0005;
+}
+.panel h2{color:#e7f6ff}
+.micro-label{color:#79c8eb}
+button{border-color:#315570;background:#0a1c2c;color:#d1edfb}
+button:hover{background:#12324b;border-color:#63cfff}
+.map-actions .selected{background:#9beaff;color:#041522}
+input[type=range]{accent-color:#68d9ff}
+input[type=checkbox]{accent-color:#68d9ff}
+.buttons .play{background:linear-gradient(110deg,#62d5ff,#a3edff);color:#041522}
+.max-card{border-top-color:#57caff;background:radial-gradient(ellipse at 100% 0,#1675a633,transparent 60%),linear-gradient(145deg,#102b42,#0b1929)}
+.tsunami-panel{border-top-color:#5aaeea}
+@media(max-width:720px){
+ .header{padding:14px;min-height:0;border-radius:15px}
+ .brand{gap:11px}
+ .brand-icon{width:52px;height:52px}
+ .brand-icon svg{width:46px;height:46px}
+ .brand-wordmark{font-size:23px}
+ .brand-caption{font-size:6px;letter-spacing:.18em}
+ .brand-page-title{font-size:14px;margin-top:7px}
+ .tagline{font-size:9px}
+}
+
+</style>
 </head>
 <body>
-<div class="shell"><header class="header"><div class="brand"><div class="brand-icon" aria-hidden="true"><svg viewBox="0 0 48 48" role="presentation"><circle cx="24" cy="24" r="19"/><path d="M6 25h10l4-11 8 21 5-11h9"/></svg></div><div><div class="eyebrow">TENQRA　/　JAPAN EARTHQUAKE LAB</div><h1>震度・津波シミュレーター</h1><p class="tagline">世界地図で見る、日本周辺の揺れと津波の伝播</p></div></div><div style="display:flex;align-items:center;gap:8px"><a class="status-pill live-link" href="live.html" style="text-decoration:none">● LIVE 地震モニター</a><div class="status-pill"><i></i>SCENARIO SIMULATOR</div></div></header>
+<div class="shell"><header class="header"><div class="brand">
+<div class="brand-icon" aria-hidden="true">
+<svg viewBox="0 0 64 64" role="presentation">
+<defs><linearGradient id="tenqraOrb" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7fbff"/><stop offset=".48" stop-color="#55cfff"/><stop offset="1" stop-color="#2478ed"/></linearGradient></defs>
+<circle cx="32" cy="32" r="23" fill="none" stroke="url(#tenqraOrb)" stroke-width="1.8"/>
+<ellipse cx="32" cy="32" rx="11" ry="23" fill="none" stroke="#63cfff" stroke-opacity=".5"/>
+<path d="M10 32h44M14 21h36M14 43h36" fill="none" stroke="#63cfff" stroke-opacity=".25"/>
+<path d="M2 34h15l5-8 6 17 6-27 6 18 5-7h17" fill="none" stroke="#d7fbff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 14c12-10 29-11 41-1" fill="none" stroke="#8ce7ff" stroke-width="1.4" stroke-linecap="round"/>
+</svg></div>
+<div class="brand-copy"><div class="brand-wordmark">TENQRA<span>®</span></div><div class="brand-caption">EARTHQUAKE INFORMATION PLATFORM</div><div class="brand-page-title">震度・津波シミュレーター</div><p class="tagline">世界地図で見る、日本周辺の揺れと津波の伝播</p></div></div><div style="display:flex;align-items:center;gap:8px"><a class="status-pill live-link" href="live.html" style="text-decoration:none">● LIVE 地震モニター</a><div class="status-pill"><i></i>SCENARIO SIMULATOR</div></div></header>
 <main class="grid"><section class="map-panel" aria-label="世界地図とシミュレーション表示"><div class="map-head"><div><div class="map-title">INTERACTIVE WORLD MAP</div><div class="map-sub">震源の設定・震度ヒートマップ・波の広がり</div></div><div class="map-actions"><button id="japanView" type="button">日本周辺</button><button id="worldView" class="selected" type="button">世界全体</button></div></div><div class="map-wrap"><div id="worldmap" role="application" aria-label="拡大縮小・移動可能な世界地図。日本周辺をクリックして震源を設定"></div><div class="map-status" id="mapStatus" aria-live="polite">地図をドラッグして移動。ホイール・ピンチ・＋−で拡大縮小。震源設定は日本周辺の対象域内です。</div><div class="map-legend"><div class="legend-title">震度マーカー</div><div class="map-levels" id="mapLegendLevels"></div></div></div><div class="timeline"><div class="timeline-head"><strong>津波の経過時間</strong><output id="tlt">0時間0分</output></div><input id="tl" type="range" min="0" max="300" step="1" value="0" aria-label="津波シミュレーションの経過時間"><div id="tst" class="caption" aria-live="polite"></div></div><div class="map-footer"><span><strong>表示範囲：</strong>世界全体　/　<strong>計算対象：</strong>日本周辺</span><span>色の広がりは観測点を使った計算上の可視化です</span></div></section>
 <aside class="rail" aria-label="シミュレーション操作と結果">
 <section class="panel controls-panel"><div class="panel-head"><div><h2>シナリオ設定</h2><p class="kicker">規模・深さ・再生速度を調整</p></div><span class="micro-label">CONTROL</span></div>
