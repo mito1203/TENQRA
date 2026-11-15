@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07111d">
+<title>TENQRAについて — データの出典・利用上の注意</title>
+<meta name="description" content="TENQRAのサイト概要、地震・津波情報のデータ出典、シミュレーターの利用上の注意について説明します。">
+<link rel="canonical" href="https://mito1203.github.io/TENQRA/about.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TENQRAについて — データの出典・利用上の注意">
+<meta property="og:description" content="TENQRAのサイト概要、情報の出典、シミュレーターの利用上の注意。">
+<meta property="og:url" content="https://mito1203.github.io/TENQRA/about.html">
+<meta property="og:site_name" content="TENQRA">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"TENQRAについて","url":"https://mito1203.github.io/TENQRA/about.html","inLanguage":"ja","isPartOf":{"@type":"WebSite","name":"TENQRA","url":"https://mito1203.github.io/TENQRA/"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#050b15;--panel:#0b1626;--edge:#1d3a55;--text:#edf7ff;--muted:#a4bbcc;--cyan:#9deaff}
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;background:radial-gradient(ellipse 900px 420px at 50% -220px,#14528a66,transparent 72%),var(--bg);color:var(--text);font:15px/1.8 "Hiragino Sans","Yu Gothic UI","Segoe UI",system-ui,sans-serif}
+main{width:min(900px,calc(100% - 32px));margin:0 auto;padding:28px 0 56px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px}
+.brand{font-weight:900;letter-spacing:.2em;color:#d7f7ff;text-decoration:none;font-size:22px}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav a,.back{color:var(--cyan);text-decoration:none;border:1px solid #31536c;border-radius:999px;padding:7px 12px;font-size:13px}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.25;margin:0 0 12px}
+.lead{color:var(--muted);margin:0 0 28px}
+section{padding:22px;margin:16px 0;border:1px solid var(--edge);border-radius:16px;background:linear-gradient(145deg,#102136,#091522)}
+h2{font-size:19px;margin:0 0 10px}
+p{margin:8px 0;color:#c4d6e3}
+a{color:var(--cyan)}
+small{color:var(--muted)}
+footer{text-align:center;color:#7892a7;font-size:12px;padding-top:20px}
+@media(max-width:560px){header{align-items:flex-start;flex-direction:column}section{padding:17px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<a class="brand" href="./">TENQRA</a>
+<nav aria-label="メインメニュー"><a href="live.html">リアルタイム</a><a href="simulation.html">シミュレーター</a></nav>
+</header>
+<h1>このサイトについて</h1>
+<p class="lead">TENQRAは、日本の地震情報を地図や観測地点ごとの震度分布で確認し、震度・津波の広がりを学習用に可視化するサイトです。</p>
+<section>
+<h2>地震情報のデータについて</h2>
+<p>トップページおよびリアルタイム地震モニターでは、P2P地震情報のAPIを通じて取得した気象庁発表の地震情報を表示しています。</p>
+<p>データの提供元・仕様については、<a href="https://github.com/p2pquake/epsp-specifications/blob/master/json-api-v2.yaml" target="_blank" rel="noopener noreferrer">P2P地震情報 JSON API仕様</a>を確認してください。</p>
+</section>
+<section>
+<h2>シミュレーターについて</h2>
+<p>震度・津波シミュレーターは、設定した条件に基づいて揺れや津波の広がりを可視化する学習用ツールです。実際の地震による被害や観測値を正確に予測するものではありません。</p>
+</section>
+<section>
+<h2>防災上の注意</h2>
+<p>このサイトの表示やシミュレーション結果だけで、避難・安全確保などの判断をしないでください。実際の災害時は、気象庁や自治体などが発表する最新の情報・避難指示に従ってください。</p>
+<p><a href="https://www.jma.go.jp/" target="_blank" rel="noopener noreferrer">気象庁公式サイト</a></p>
+</section>
+<p><a class="back" href="./">← TENQRAトップへ戻る</a></p>
+<footer>© TENQRA</footer>
+</main>
+</body>
+</html>
