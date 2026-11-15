@@ -439,7 +439,7 @@ go(true);
   const mapEl=document.getElementById('worldmap');
   const map=L.map(mapEl,{worldCopyJump:true,zoomSnap:.25,zoomDelta:.5,scrollWheelZoom:true,preferCanvas:true,maxBounds:[[-86,-360],[86,360]],maxBoundsViscosity:.55,zoomControl:true,attributionControl:true});
   if(window.SEISMO_WORLD_LITE&&window.SEISMO_WORLD_LITE.features){
-    L.geoJSON(window.SEISMO_WORLD_LITE,{interactive:false,smoothFactor:.35,style:()=>({stroke:true,color:'#9bdcf0',weight:.9,opacity:.98,fill:true,fillColor:'#286b86',fillOpacity:1,fillRule:'evenodd',lineJoin:'round',lineCap:'round'})}).addTo(map);
+    L.geoJSON(window.SEISMO_WORLD_LITE,{interactive:false,smoothFactor:.35,style:()=>({stroke:false,fill:true,fillColor:'#286b86',fillOpacity:1,fillRule:'evenodd'})}).addTo(map);
   }else{
     showStatus('世界地図データを読み込めませんでした。assets/world-lite.js の配置を確認してください。');
   }
