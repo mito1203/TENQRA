@@ -259,7 +259,7 @@ function fail(){
 const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),12000);
 fetch(FEED,{signal:ctl.signal,cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{
   const seen=new Set(),items=[];
-  for(const r of rows){const x=norm(r);if(x&&!seen.has(x.key)){seen.add(x.key);items.push(x)}}
+  for(const r of rows){const x=norm(r);if(x&&x.mag!==null&&x.place!=='震源地情報なし'&&!seen.has(x.key)){seen.add(x.key);items.push(x)}}
   if(!items.length)throw 0;render(items);
 }).catch(fail).finally(()=>clearTimeout(to));
 
