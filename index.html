@@ -243,6 +243,8 @@ function norm(f){
 }
 function when(t){return t.mo+'/'+t.d+' '+t.h+':'+t.mi}
 function render(items){
+  items=items.filter(x=>x&&x.mag!==null&&x.place&&x.place!=='震源地情報なし');
+  if(!items.length){fail();return;}
   const a=items[0];
   $('heroChip').style.background=col(a.scale);
   $('heroChip').innerHTML='<span><small style="display:block">最大震度</small>'+mark(a.scale)+'</span>';
