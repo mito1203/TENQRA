@@ -439,7 +439,7 @@ go(true);
   const mapEl=document.getElementById('worldmap');
   const map=L.map(mapEl,{worldCopyJump:true,zoomSnap:.25,zoomDelta:.5,scrollWheelZoom:true,preferCanvas:true,maxBounds:[[-86,-360],[86,360]],maxBoundsViscosity:.55,zoomControl:true,attributionControl:true});
   if(window.SEISMO_WORLD_LITE&&window.SEISMO_WORLD_LITE.features){
-    L.geoJSON(window.SEISMO_WORLD_LITE,{interactive:false,smoothFactor:.35,filter:(feature)=>{const p=feature.properties||{};const values=Object.values(p).map(v=>String(v||'').trim().toUpperCase());return !values.some(v=>['JAPAN','JPN','日本'].includes(v));},style:()=>({stroke:true,color:'#8fb6c7',weight:.85,opacity:.92,fill:true,fillColor:'#286b86',fillOpacity:1,fillRule:'evenodd',lineJoin:'round',lineCap:'round'})}).addTo(map);
+    L.geoJSON(window.SEISMO_WORLD_LITE,{interactive:false,smoothFactor:.35,filter:(feature)=>{const p=feature.properties||{};const values=Object.values(p).map(v=>String(v||'').trim().toUpperCase());return !values.some(v=>['JAPAN','JPN','日本'].includes(v));},style:()=>({stroke:true,color:'#8fb6c7',weight:.85,opacity:.92,fill:true,fillColor:'#286b86',fillOpacity:1,fillRule:'nonzero',lineJoin:'round',lineCap:'round'})}).addTo(map);
   }else{
     showStatus('世界地図データを読み込めませんでした。assets/world-lite.js の配置を確認してください。');
   }
@@ -447,7 +447,7 @@ go(true);
   const japanPane=map.createPane('japanMap');japanPane.style.zIndex='410';japanPane.style.pointerEvents='none';
   const japanStyle={interactive:false,smoothFactor:.18,noClip:false,pane:'japanMap'};
   // Soft dark casing under the prefecture borders keeps coastlines crisp against the ocean.
-  L.geoJSON(window.SEISMO_PREFECTURES,{...japanStyle,style:()=>({stroke:true,color:'#071522',weight:2.2,opacity:.95,fill:true,fillColor:'#17465e',fillOpacity:1,fillRule:'evenodd',lineJoin:'round',lineCap:'round'})}).addTo(map);
+  L.geoJSON(window.SEISMO_PREFECTURES,{...japanStyle,style:()=>({stroke:true,color:'#071522',weight:2.2,opacity:.95,fill:true,fillColor:'#17465e',fillOpacity:1,fillRule:'nonzero',lineJoin:'round',lineCap:'round'})}).addTo(map);
   // Fine, luminous prefecture boundaries on top; no second world-map geometry is used for Japan.
   L.geoJSON(window.SEISMO_PREFECTURES,{...japanStyle,style:()=>({stroke:true,color:'#b8e5f0',weight:.78,opacity:.9,fill:false,lineJoin:'round',lineCap:'round'})}).addTo(map);
   const graticule=L.layerGroup();for(let lat=-60;lat<=60;lat+=30)L.polyline([[lat,-180],[lat,180]],{color:'#264151',weight:.55,opacity:.62,interactive:false}).addTo(graticule);for(let lon=-150;lon<=180;lon+=30)L.polyline([[-80,lon],[80,lon]],{color:'#264151',weight:.55,opacity:.62,interactive:false}).addTo(graticule);graticule.addTo(map);
