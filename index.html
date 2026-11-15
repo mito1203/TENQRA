@@ -130,21 +130,6 @@ h2{font-size:22px;margin:0 0 6px;line-height:1.4}
     margin-bottom: 18px;
   }
 }
-
-/* prefecture live-intensity selector */
-.pref-shake{padding:18px;background:linear-gradient(145deg,#10253a,#091725);border:1px solid #294c65;border-radius:16px}
-.pref-shake-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.pref-shake-head label{font-size:13px;font-weight:800;color:#cce6f4}
-.pref-shake-head select{min-width:190px;padding:10px 36px 10px 12px;border:1px solid #3a627c;border-radius:9px;background:#071522;color:#e7f5fc;font:inherit;font-weight:700}
-.pref-shake-status{margin-left:auto;color:#83b8ce;font-size:12px}
-.pref-shake-event{margin:15px 0 10px;color:#d7eaf4;font-size:13px;font-weight:700}
-.pref-shake-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
-.pref-shake-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border:1px solid #294459;border-radius:10px;background:#091827}
-.pref-shake-place{min-width:0;color:#d6e7f0;font-size:13px;overflow-wrap:anywhere}
-.pref-shake-scale{flex:none;padding:5px 9px;border-radius:7px;color:#06111b;font-size:12px;font-weight:900}
-.pref-shake-empty{padding:18px;border:1px dashed #36546a;border-radius:10px;color:#9db4c3;font-size:13px}
-.pref-shake-note{margin:12px 0;color:#8fa8ba;font-size:11px;line-height:1.6}
-@media(max-width:600px){.pref-shake{padding:13px}.pref-shake-head select{width:100%}.pref-shake-status{margin-left:0}}
 </style>
 </head>
 <body>
@@ -182,31 +167,6 @@ h2{font-size:22px;margin:0 0 6px;line-height:1.4}
       <span class="chip" id="heroChip"><span>—</span></span>
       <span class="q-body"><span class="q-place" id="heroPlace" style="display:block">最新の地震を取得中…</span><span class="q-meta" id="heroMeta">気象庁発表の情報を読み込んでいます</span></span>
     </a>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="h-pref-shake">
-  <h2 id="h-pref-shake">都道府県別・最新の観測震度</h2>
-  <p class="sub">都道府県を選ぶと、気象庁が発表した最新の地震情報から、その地域の観測震度を表示します。</p>
-  <div class="pref-shake card">
-    <div class="pref-shake-head">
-      <label for="prefShakeSelect">都道府県</label>
-      <select id="prefShakeSelect" aria-label="都道府県を選択">
-        <option value="東京都" selected>東京都</option>
-        <option value="北海道">北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option>
-        <option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option>神奈川県</option>
-        <option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option><option>岐阜県</option><option>静岡県</option><option>愛知県</option>
-        <option>三重県</option><option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option>
-        <option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option>
-        <option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option>
-        <option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
-      </select>
-      <span class="pref-shake-status" id="prefShakeStatus" role="status">最新情報を取得しています…</span>
-    </div>
-    <div class="pref-shake-event" id="prefShakeEvent">観測情報を読み込んでいます。</div>
-    <div class="pref-shake-list" id="prefShakeList"></div>
-    <p class="pref-shake-note">※連続的な揺れのライブ波形ではなく、気象庁から発表済みの最新の震度情報です。発表がない場合は「該当する観測情報なし」と表示します。</p>
-    <a class="more" href="live.html">全国の震度分布を地図で見る →</a>
   </div>
 </section>
 
@@ -296,23 +256,6 @@ function fail(){
   $('heroMeta').textContent='モニターのページで最新の状況を確認できます';
   $('recent').innerHTML='<div class="state">地震情報を取得できませんでした。<a href="live.html" style="color:#b9f4ff">リアルタイムモニター</a>で確認してください。</div>';
 }
-const PREF_FEED='https://api.p2pquake.net/v2/history?codes=551&limit=100';
-function scaleName(s){return ({10:'1',20:'2',30:'3',40:'4',45:'5弱',46:'5弱',50:'5強',55:'6弱',60:'6強',70:'7'})[s]||'—'}
-function scaleRank(s){return ({10:1,20:2,30:3,40:4,45:5,46:5,50:6,55:7,60:8,70:9})[s]||0}
-function parseFullTime(v){const m=String(v||'').match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})\s+(\d{1,2}):(\d{2})/);return m?new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5]):null}
-function renderPrefShake(rows){
- const pref=$('prefShakeSelect').value;let chosen=null;
- for(const f of rows||[]){if(f?.code!==551||!Array.isArray(f.points))continue;const points=f.points.filter(p=>p.pref===pref&&Number.isFinite(Number(p.scale))&&Number(p.scale)>=10);if(points.length){chosen={f,points};break}}
- $('prefShakeStatus').textContent='約30秒ごとに更新';
- if(!chosen){$('prefShakeEvent').textContent=pref+'の発表済み観測情報は、取得した最新100件にはありません。';$('prefShakeList').innerHTML='<div class="pref-shake-empty">該当する観測情報はありません。地震がない場合も正常な表示です。</div>';return}
- const q=chosen.f.earthquake||{},h=q.hypocenter||{},dt=parseFullTime(q.time),points=chosen.points.slice().sort((a,b)=>scaleRank(Number(b.scale))-scaleRank(Number(a.scale))||String(a.addr||'').localeCompare(String(b.addr||''),'ja'));
- $('prefShakeEvent').textContent=(h.name||'震源地情報なし')+' ／ '+(dt?dt.toLocaleString('ja-JP'):'発生時刻不明')+' ／ M'+(Number.isFinite(Number(h.magnitude))?Number(h.magnitude).toFixed(1):'—');
- $('prefShakeList').innerHTML=points.map(p=>{const n=Number(p.scale),label=scaleName(n),color=col(n);return '<div class="pref-shake-item"><span class="pref-shake-place">'+esc(p.addr||pref)+'</span><span class="pref-shake-scale" style="background:'+color+'">震度'+label+'</span></div>'}).join('');
-}
-async function loadPrefShake(){try{const r=await fetch(PREF_FEED,{cache:'no-store'});if(!r.ok)throw new Error('feed');const rows=await r.json();renderPrefShake(rows)}catch(e){$('prefShakeStatus').textContent='取得に失敗';$('prefShakeEvent').textContent='地震情報を取得できませんでした。';$('prefShakeList').innerHTML='<div class="pref-shake-empty">通信状況を確認して再読み込みしてください。</div>'}}
-$('prefShakeSelect').addEventListener('change',loadPrefShake);
-loadPrefShake();setInterval(loadPrefShake,30000);
-
 const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),12000);
 fetch(FEED,{signal:ctl.signal,cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{
   const seen=new Set(),items=[];
