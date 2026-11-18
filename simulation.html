@@ -350,7 +350,7 @@ const REGION_ORDER=['北海道','東北','関東','中部','近畿','中国','�
 let selectedResultRegion={quake:'all',tsunami:'all'},regionResultItems={quake:[],tsunami:[]},selectedResultPage={quake:0,tsunami:0},tsunamiEntries={places:[],coast:[]},activeTsunamiMode='coast';
 function groupedTables(items,kind){regionResultItems[kind]=items||[];const query=(document.getElementById(kind==='quake'?'quakeSearch':'tsunamiSearch')?.value||'').normalize('NFKC').trim().toLocaleLowerCase('ja-JP').split(/\s+/).filter(Boolean);const matches=regionResultItems[kind].filter(r=>{const text=`${r.n||''} ${r.near||''} ${regionOf(r.lo,r.la)} ${r.lo} ${r.la} ${r.meshId||''} ${kind==='quake'?`震度${LAB[lv(r.I)]}`:`${r.h?.toFixed(1)||''}m`}`.normalize('NFKC').toLocaleLowerCase('ja-JP');return query.every(term=>text.includes(term))});matches.sort((a,b)=>kind==='quake'?(b.I-a.I)||String(a.n||'').localeCompare(String(b.n||''),'ja'):(b.h-a.h)||String(a.near||a.n||'').localeCompare(String(b.near||b.n||''),'ja'));const groups={};matches.forEach(r=>{const key=regionOf(r.lo,r.la);(groups[key]||(groups[key]=[])).push(r)});const keys=REGION_ORDER.filter(k=>groups[k]?.length);if(!keys.length)return '<div class="empty-state">'+(query.length?'検索に一致する地点はありません':kind==='quake'?'地点データがありません':'表示できる津波地点はありません')+'</div>';let selected=selectedResultRegion[kind];if(selected!=='all'&&!groups[selected])selected='all';selectedResultRegion[kind]=selected;const crumb='<nav class="region-crumb" aria-label="地域別の結果"><button type="button" data-region="all" class="'+(selected==='all'?'active':'')+'">全国</button>'+keys.map(k=>'<span aria-hidden="true">›</span><button type="button" data-region="'+k+'" class="'+(selected===k?'active':'')+'">'+k+'<small>'+groups[k].length+'</small></button>').join('')+'</nav>';if(selected==='all'){const summary=keys.map(k=>{const a=groups[k],peak=a.reduce((best,r)=>kind==='quake'?Math.max(best,r.I):Math.max(best,r.h),0),label=kind==='quake'?LAB[lv(peak)]+' / '+peak.toFixed(1):peak.toFixed(1)+'m';return '<tr><td><button type="button" class="region-open" data-region="'+k+'">'+k+' を表示　›</button></td><td><b>'+label+'</b></td><td>'+a.length+'地点</td></tr>'}).join('');const head=kind==='quake'?'<tr><th>地域</th><th>最大震度 / 計測震度</th><th>地点数</th></tr>':'<tr><th>地域</th><th>最大水位変化</th><th>対象地点</th></tr>';return crumb+'<div class="crumb-hint">地域を選ぶと地点ごとの一覧を表示します</div><div class="table-wrap"><table>'+head+summary+'</table></div>'}const a=groups[selected],pageSize=20,totalPages=Math.ceil(a.length/pageSize);selectedResultPage[kind]=Math.max(0,Math.min(selectedResultPage[kind],totalPages-1));const page=selectedResultPage[kind],visible=a.slice(page*pageSize,(page+1)*pageSize);const rows=visible.map((r,i)=>{if(kind==='quake'){const location=(r.n||'観測点')+'付近 <span class="coord">'+r.la.toFixed(2)+'°N / '+r.lo.toFixed(2)+'°E · #'+(r.id||page*pageSize+i+1)+'</span>';return '<tr><td>'+location+'</td><td><b style="color:'+COL[lv(r.I)]+'">'+LAB[lv(r.I)]+'</b> <span class="sm">'+r.I.toFixed(1)+'</span></td><td>'+Math.round(r.ts-r.tp)+'秒</td></tr>'}const location=(r.near||r.n||'沿岸地域')+'周辺 <span class="coord">'+r.la.toFixed(2)+'°N / '+r.lo.toFixed(2)+'°E</span>';return '<tr><td>'+location+'</td><td><b style="color:'+(TCL[tcl(r.h)]?.[2]||'inherit')+'">'+r.h.toFixed(1)+'m</b></td><td>'+(r.t<1e8?Math.round(r.t/60)+'分':'—')+'</td></tr>'}).join('');const head=kind==='quake'?'<tr><th>観測地点（代表地名・座標）</th><th>震度 / 計測震度</th><th>P波→S波</th></tr>':'<tr><th>沿岸の地名</th><th>最大水位変化</th><th>第1波の目安</th></tr>';const pager=totalPages>1?'<div class="result-pager"><button type="button" data-page="-1" '+(page===0?'disabled':'')+'>‹ 前</button><span>'+((page*pageSize)+1)+'–'+Math.min((page+1)*pageSize,a.length)+' / '+a.length+'地点 · '+(page+1)+' / '+totalPages+'</span><button type="button" data-page="1" '+(page>=totalPages-1?'disabled':'')+'>次 ›</button></div>':'';return crumb+'<div class="crumb-current"><button type="button" data-region="all">全国</button><span>›</span><strong>'+selected+'</strong><span class="crumb-count">'+a.length+'地点</span></div><div class="table-wrap"><table>'+head+rows+'</table></div>'+pager}
 function compute(){EV=evt(M,FT.d===-.02?"inter":FT.d===.12?"slab":"crust");tmax=0;ST.forEach((s,i)=>{s.id=i+1;calc(s);if(s.I>=.5&&s.ts>tmax)tmax=s.ts});tmax=Math.max(tmax,30)+5;
-const m={};ST.forEach(s=>{if(!m[s.n]||s.I>m[s.n].I)m[s.n]=s});res=Object.values(m).sort((a,b)=>b.I-a.I);result()}
+const m={};ST.forEach(s=>{if(!m[s.n]||s.I>m[s.n].I)m[s.n]=s});res=Object.values(m).sort((a,b)=>b.I-a.I);result();if(window.recalcMunicipalityQuakes)window.recalcMunicipalityQuakes()}
 /*津波(線形長波方程式)*/
 const GR=.1,NX=Math.round((LON1-LON0)/GR),NY=Math.round((LAT1-LAT0)/GR),NN=NX*NY,GG=9.8,TDT=15,TST=1200,TSN=12,DYM=GR*111000;let TSG=.55;const TCITY=[['根室',145.58,43.33],['釧路',144.38,42.97],['襟裳',143.25,41.93],['苫小牧',141.6,42.63],['室蘭',141,42.3],['函館',140.73,41.77],['江差',140.12,41.87],['小樽',141,43.2],['稚内',141.67,45.4],['紋別',143.35,44.35],['網走',144.27,44.02],['八戸',141.5,40.5],['青森',140.74,40.83],['久慈',141.8,40.19],['宮古',141.97,39.64],['釜石',141.89,39.27],['大船渡',141.72,39.08],['気仙沼',141.57,38.9],['石巻',141.3,38.43],['仙台港',141,38.27],['相馬',140.97,37.8],['いわき',140.9,37.05],['大洗',140.58,36.31],['鹿島',140.7,35.97],['銚子',140.85,35.73],['九十九里',140.4,35.5],['館山',139.87,34.99],['東京湾',139.8,35.6],['横浜',139.65,35.45],['小田原',139.15,35.25],['伊東',139.1,34.97],['下田',138.95,34.67],['清水',138.5,35],['御前崎',138.23,34.6],['浜松',137.7,34.65],['渥美',137.2,34.6],['津',136.5,34.73],['尾鷲',136.2,34.07],['串本',135.77,33.47],['田辺',135.38,33.73],['和歌山',135.15,34.2],['大阪湾',135.4,34.62],['神戸',135.2,34.65],['室戸',134.15,33.28],['高知',133.55,33.5],['土佐清水',133,32.78],['宇和島',132.55,33.2],['松山',132.7,33.9],['徳島',134.6,34.05],['高松',134.05,34.35],['広島',132.45,34.35],['下関',130.93,33.95],['福岡',130.4,33.65],['長崎',129.85,32.75],['熊本',130.6,32.7],['鹿児島',130.58,31.58],['宮崎',131.45,31.9],['大分',131.65,33.25],['種子島',131,30.6],['那覇',127.67,26.2],['酒田',139.83,38.92],['秋田',140.05,39.75],['新潟',139.05,37.95],['輪島',136.9,37.4],['金沢',136.6,36.6],['敦賀',136.07,35.65],['舞鶴',135.4,35.5],['鳥取',134.2,35.55],['松江',133.1,35.55],['浜田',132.1,34.9],['能代',140,40.2],['深浦',139.9,40.65],['佐渡',138.4,38]];
 const JPE=[[34,131],[36,133],[37,136.7],[38,139],[40,139.9],[42,140],[44,141.5],[46,142]];
@@ -416,7 +416,7 @@ ST.forEach(s=>{if(t<s.tp)cx.fillStyle='#4a5a70',cx.fillRect(s.x-1,s.y-1,2,2);els
 pass.forEach((a,i)=>{cx.fillStyle=COL[i];a.forEach(s=>{cx.beginPath();cx.arc(s.x,s.y,i>=4?2.8:2.1,0,7);cx.fill()})});
 cx.strokeStyle='#f33';cx.lineWidth=3;cx.beginPath();cx.moveTo(ex-9,ey-9);cx.lineTo(ex+9,ey+9);cx.moveTo(ex+9,ey-9);cx.lineTo(ex-9,ey+9);cx.stroke();
 const T=Math.min(t,tmax);cx.fillStyle='#fff';cx.font='15px sans-serif';cx.fillText('発震から '+Math.floor(T/60)+'分'+String(Math.floor(T%60)).padStart(2,'0')+'秒   ●P波 ●S波',10,22);
-document.getElementById('tt').textContent=''}
+document.getElementById('tt').textContent='';if(window.renderMunicipalityQuakes)window.renderMunicipalityQuakes()}
 function result(){const m=res[0],cnt=Array(10).fill(0);ST.forEach(s=>cnt[lv(s.I)]++);const L=lv(m.I);
 mx.textContent='震度'+LAB[L];mx.style.color=COL[L]=='#F2F2FF'?'inherit':COL[L];
 mxn.textContent=m.n+'付近 (計測震度 '+m.I.toFixed(1)+') / M'+M.toFixed(1)+' 深さ'+D+'km / 全'+ST.length+'観測点';
@@ -454,6 +454,44 @@ go(true);
   const graticule=L.layerGroup();for(let lat=-60;lat<=60;lat+=30)L.polyline([[lat,-180],[lat,180]],{color:'#264151',weight:.55,opacity:.62,interactive:false}).addTo(graticule);for(let lon=-150;lon<=180;lon+=30)L.polyline([[-80,lon],[80,lon]],{color:'#264151',weight:.55,opacity:.62,interactive:false}).addTo(graticule);graticule.addTo(map);
   map.attributionControl.setPrefix('<a href="https://www.naturalearthdata.com/">Natural Earth 1:10m (Public Domain)</a> · <a href="https://leafletjs.com/">Leaflet</a>');map.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2026.html">国土交通省 国土数値情報（行政区域データ）</a>');
   L.control.scale({imperial:false,position:'bottomright',maxWidth:110}).addTo(map);
+  // Municipality-level simulated intensity markers (MLIT N03 derived data)
+  const muniPane=map.createPane('municipalityQuakes');muniPane.style.zIndex='440';
+  const muniRenderer=L.canvas({padding:.5});
+  const muniLayer=L.layerGroup().addTo(map);
+  let muniStations=[],muniLoaded=false,muniLastPaint=0;
+  const muniColors=['#64748b','#67e8f9','#3b82f6','#34d399','#fde047','#fbbf24','#f97316','#e11d48','#c026d3','#6d28d9'];
+  function muniCenter(feature){
+    const polys=feature.geometry?.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry?.type==='MultiPolygon'?feature.geometry.coordinates:[];
+    let sx=0,sy=0,sw=0;
+    for(const poly of polys){for(const ring of poly){for(let i=0;i<ring.length-1;i++){const a=ring[i],b=ring[i+1],cross=a[0]*b[1]-b[0]*a[1];sx+=(a[0]+b[0])*cross;sy+=(a[1]+b[1])*cross;sw+=cross}}
+    }
+    if(Math.abs(sw)>1e-9)return [sx/(3*sw),sy/(3*sw)];
+    const pts=[];const walk=x=>{if(Array.isArray(x)){if(typeof x[0]==='number')pts.push(x);else x.forEach(walk)}};walk(feature.geometry?.coordinates);
+    if(!pts.length)return null;return [pts.reduce((v,p)=>v+p[0],0)/pts.length,pts.reduce((v,p)=>v+p[1],0)/pts.length]
+  }
+  function muniName(p){return [p.N03_004,p.N03_003,p.N03_002,p.N03_001].filter(Boolean).join(' ')}
+  function muniIntensity(st){return t<st.tp?0:t<st.ts?Math.max(0,st.I-1.6):st.I}
+  function recalcMunicipalityQuakes(){muniStations.forEach((st,i)=>{st.id=50000+i;st.a=amp(st.lo,st.la);calc(st)})}
+  function renderMunicipalityQuakes(){
+    if(!muniLoaded)return;const now=performance.now();if(now-muniLastPaint<120)return;muniLastPaint=now;
+    const visible=map.getZoom()>=4.25;muniLayer.eachLayer(layer=>{const st=layer.options._muniStation;if(!st)return;const intensity=muniIntensity(st),level=lv(intensity),arrived=t>=st.tp;layer.setStyle({fillColor:arrived?muniColors[level]:'#64748b',color:arrived?'#e8f8ff':'#9aa9b8',weight:arrived?1:.65,opacity:visible?.95:0,fillOpacity:visible?(arrived?.96:.42):0});layer.setRadius(map.getZoom()>=6.5?4.1:map.getZoom()>=5?3.1:2.2) });}
+  window.recalcMunicipalityQuakes=recalcMunicipalityQuakes;window.renderMunicipalityQuakes=renderMunicipalityQuakes;
+  fetch('https://geo.maderaojen.me/datasets/jp-municipalities/releases/v1/2026-08-04.1/data.geojson')
+    .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+    .then(data=>{
+      const seen=new Set();
+      data.features.forEach(feature=>{
+        const p=feature.properties||{},name=muniName(p),center=muniCenter(feature);if(!center||!name)return;
+        const key=String(p.N03_007||name);if(seen.has(key))return;seen.add(key);
+        const st={lo:center[0],la:center[1],n:name,a:1,id:50000+muniStations.length,I:0,tp:0,ts:0};
+        muniStations.push(st);
+        const marker=L.circleMarker([st.la,st.lo],{pane:'municipalityQuakes',renderer:muniRenderer,radius:3,color:'#e8f8ff',weight:.7,fillColor:'#64748b',fillOpacity:.7,opacity:.9});
+        marker.options._muniStation=st;marker.bindTooltip(name+'<br>推定震度を表示',{direction:'top',className:'muni-tooltip'});marker.addTo(muniLayer);
+      });
+      muniLoaded=true;recalcMunicipalityQuakes();renderMunicipalityQuakes();
+      showStatus('市区町村ごとの推定震度マーカー '+muniStations.length+'地点を読み込みました。マーカーを選ぶと自治体名を確認できます。');
+    }).catch(err=>{console.warn('Municipality layer unavailable',err);showStatus('市区町村マーカーの読み込みに失敗しました。基本の震度シミュレーションは利用できます。')});
+  map.on('zoomend moveend',renderMunicipalityQuakes);
   const globeBounds=L.latLngBounds([[-78,-180],[82,180]]),japanBounds=L.latLngBounds([[23,125],[57,164]]),simBounds=L.latLngBounds([[LAT0,LON0],[LAT1,LON1]]);
   const visual=document.createElement('canvas');visual.setAttribute('aria-hidden','true');Object.assign(visual.style,{position:'absolute',inset:'0',width:'100%',height:'100%',zIndex:'430',pointerEvents:'none',transition:'opacity .12s'});map.getContainer().appendChild(visual);const vctx=visual.getContext('2d');
   let tsOverlay=null,lastSnapshot=-1,lastRender=0,tsunamiScratch=null,tsunamiScratchCtx=null,tsunamiDisplay=null,tsunamiOceanMask=null;
