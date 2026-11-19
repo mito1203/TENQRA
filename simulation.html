@@ -415,7 +415,7 @@ const ex=X(ep.lon),ey=Y(ep.lat),cl=Math.cos(ep.lat*.0174);
 cx.strokeStyle='#f33';cx.lineWidth=3;cx.beginPath();cx.moveTo(ex-9,ey-9);cx.lineTo(ex+9,ey+9);cx.moveTo(ex+9,ey-9);cx.lineTo(ex-9,ey+9);cx.stroke();
 const T=Math.min(t,tmax);cx.fillStyle='#fff';cx.font='15px sans-serif';cx.fillText('発震から '+Math.floor(T/60)+'分'+String(Math.floor(T%60)).padStart(2,'0')+'秒   ●P波 ●S波',10,22);
 document.getElementById('tt').textContent='';if(window.renderMunicipalityQuakes)window.renderMunicipalityQuakes()}
-function result(){const source=muniLoaded&&muniStations.length?muniStations:ST;const ordered=[...source].sort((a,b)=>b.I-a.I);const m=ordered[0]||ST[0],cnt=Array(10).fill(0);source.forEach(s=>cnt[lv(s.I)]++);const L=lv(m.I);
+function result(){const municipal=window.muniStations||[],source=window.muniLoaded&&municipal.length?municipal:ST;const ordered=[...source].sort((a,b)=>b.I-a.I);const m=ordered[0]||ST[0],cnt=Array(10).fill(0);source.forEach(s=>cnt[lv(s.I)]++);const L=lv(m.I);
 mx.textContent='震度'+LAB[L];mx.style.color=COL[L];
 mxn.textContent=m.n+' (計測震度 '+m.I.toFixed(1)+') / M'+M.toFixed(1)+' 深さ'+D+'km / 全'+source.length+'地点';
 document.getElementById('cnt').innerHTML=cnt.map((n,i)=>n?'<span style="background:'+COL[i]+';color:'+([0,1,3,4,5,6].includes(i)?'#101820':'#fff')+'">'+LAB[i]+': '+n+'地点</span>':'').join('');
@@ -457,6 +457,7 @@ go(true);
   const muniRenderer=L.canvas({padding:.5});
   const muniLayer=L.layerGroup().addTo(map);
   let muniStations=[],muniLoaded=false,muniLastPaint=0;
+  window.muniStations=muniStations;window.muniLoaded=false;
   const muniColors=['#64748b','#67e8f9','#3b82f6','#34d399','#fde047','#fbbf24','#f97316','#e11d48','#c026d3','#6d28d9'];
   function muniCenter(feature){
     const polys=feature.geometry?.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry?.type==='MultiPolygon'?feature.geometry.coordinates:[];
@@ -486,7 +487,7 @@ go(true);
         const marker=L.circleMarker([st.la,st.lo],{pane:'municipalityQuakes',renderer:muniRenderer,radius:3,color:'#e8f8ff',weight:.7,fillColor:'#64748b',fillOpacity:.7,opacity:.9});
         marker.options._muniStation=st;marker.bindTooltip('',{direction:'top',className:'muni-tooltip'});marker.on('mouseover',()=>{const level=lv(muniIntensity(st));marker.setTooltipContent(name+'<br>'+(t<st.tp?'未到達':('推定震度 '+LAB[level]+'（計測震度 '+muniIntensity(st).toFixed(1)+'）')))});marker.addTo(muniLayer);
       });
-      muniLoaded=true;recalcMunicipalityQuakes();renderMunicipalityQuakes();result();
+      muniLoaded=true;window.muniLoaded=true;recalcMunicipalityQuakes();renderMunicipalityQuakes();result();
       showStatus('市区町村ごとの推定震度マーカー '+muniStations.length+'地点を読み込みました。右側の一覧にも全国の自治体別震度を表示しています。');
     }).catch(err=>{console.warn('Municipality layer unavailable',err);showStatus('市区町村マーカーの読み込みに失敗しました。基本の震度シミュレーションは利用できます。')});
   map.on('zoomend moveend',renderMunicipalityQuakes);
