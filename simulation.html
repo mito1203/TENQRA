@@ -453,8 +453,14 @@ go(true);
   map.attributionControl.setPrefix('<a href="https://www.naturalearthdata.com/">Natural Earth 1:10m (Public Domain)</a> · <a href="https://leafletjs.com/">Leaflet</a>');map.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2026.html">国土交通省 国土数値情報（行政区域データ）</a>');
   L.control.scale({imperial:false,position:'bottomright',maxWidth:110}).addTo(map);
   // Municipality-level simulated intensity markers (MLIT N03 derived data)
-  const muniBoundaryPane=map.createPane('municipalityBoundaries');muniBoundaryPane.style.zIndex='630';
-  const muniBoundaryStyle=()=>({pane:'municipalityBoundaries',color:'#15364b',weight:map.getZoom()>=7?1.05:.72,opacity:map.getZoom()>=5.5?.88:0,fill:false,interactive:false});
+  const muniBoundaryPane=map.createPane('municipalityBoundaries');muniBoundaryPane.style.zIndex='620';
+  // Municipal borders stay deliberately quiet so prefecture borders remain the primary visual guide.
+  const muniBoundaryStyle=()=>({pane:'municipalityBoundaries',color:'#9bb6c5',weight:map.getZoom()>=8?.48:map.getZoom()>=6.5?.38:.32,opacity:map.getZoom()>=5.5?.42:0,fill:false,interactive:false,lineCap:'round',lineJoin:'round'});
+  // Redraw prefecture borders above municipal lines for a clear administrative hierarchy.
+  const prefectureTopPane=map.createPane('prefectureTop');prefectureTopPane.style.zIndex='635';prefectureTopPane.style.pointerEvents='none';
+  const prefectureTopStyle={interactive:false,smoothFactor:.12,noClip:false,pane:'prefectureTop'};
+  L.geoJSON(window.SEISMO_PREFECTURES,{...prefectureTopStyle,style:()=>({color:'#071522',weight:2.35,opacity:.96,fill:false,lineJoin:'round',lineCap:'round'})}).addTo(map);
+  L.geoJSON(window.SEISMO_PREFECTURES,{...prefectureTopStyle,style:()=>({color:'#d5f0f7',weight:1.12,opacity:.98,fill:false,lineJoin:'round',lineCap:'round'})}).addTo(map);
   let muniBoundaryLayer=null;
   const muniPane=map.createPane('municipalityQuakes');muniPane.style.zIndex='640';
   const muniRenderer=L.canvas({pane:'municipalityQuakes',padding:.5});
@@ -481,7 +487,7 @@ go(true);
   fetch('https://geo.maderaojen.me/datasets/jp-municipalities/releases/v1/2026-08-04.1/data.geojson')
     .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
     .then(data=>{
-      muniBoundaryLayer=L.geoJSON(data,{pane:'municipalityBoundaries',style:muniBoundaryStyle,interactive:false}).addTo(map);
+      muniBoundaryLayer=L.geoJSON(data,{pane:'municipalityBoundaries',smoothFactor:.12,noClip:false,style:muniBoundaryStyle,interactive:false}).addTo(map);
       const seen=new Set();
       data.features.forEach(feature=>{
         const p=feature.properties||{},name=muniName(p),center=muniCenter(feature);if(!center||!name)return;
