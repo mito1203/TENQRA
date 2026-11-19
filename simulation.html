@@ -453,6 +453,9 @@ go(true);
   map.attributionControl.setPrefix('<a href="https://www.naturalearthdata.com/">Natural Earth 1:10m (Public Domain)</a> · <a href="https://leafletjs.com/">Leaflet</a>');map.attributionControl.addAttribution('<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2026.html">国土交通省 国土数値情報（行政区域データ）</a>');
   L.control.scale({imperial:false,position:'bottomright',maxWidth:110}).addTo(map);
   // Municipality-level simulated intensity markers (MLIT N03 derived data)
+  const muniBoundaryPane=map.createPane('municipalityBoundaries');muniBoundaryPane.style.zIndex='630';
+  const muniBoundaryStyle=()=>({pane:'municipalityBoundaries',color:'#15364b',weight:map.getZoom()>=7?1.05:.72,opacity:map.getZoom()>=5.5?.88:0,fill:false,interactive:false});
+  let muniBoundaryLayer=null;
   const muniPane=map.createPane('municipalityQuakes');muniPane.style.zIndex='640';
   const muniRenderer=L.canvas({pane:'municipalityQuakes',padding:.5});
   const muniLayer=L.layerGroup().addTo(map);
@@ -473,11 +476,12 @@ go(true);
   function recalcMunicipalityQuakes(){muniStations.forEach((st,i)=>{st.id=50000+i;st.a=amp(st.lo,st.la);calc(st)})}
   function renderMunicipalityQuakes(){
     if(!muniLoaded)return;const now=performance.now();if(now-muniLastPaint<120)return;muniLastPaint=now;
-    const visible=map.getZoom()>=4.25;muniLayer.eachLayer(layer=>{const st=layer.options._muniStation;if(!st)return;const intensity=muniIntensity(st),level=lv(intensity),arrived=t>=st.tp;layer.setStyle({fillColor:arrived?muniColors[level]:'#64748b',color:arrived?'#ffffff':'#9aa9b8',weight:arrived?1.35:.7,opacity:visible?.98:0,fillOpacity:visible?(arrived?.98:.28):0});layer.setRadius(map.getZoom()>=6.5?4.1:map.getZoom()>=5?3.1:2.2) });}
+    const zoom=map.getZoom(),visible=zoom>=4.25;if(muniBoundaryLayer)muniBoundaryLayer.setStyle(muniBoundaryStyle());muniLayer.eachLayer(layer=>{const st=layer.options._muniStation;if(!st)return;const intensity=muniIntensity(st),level=lv(intensity),arrived=t>=st.tp;layer.setStyle({fillColor:arrived?muniColors[level]:'#64748b',color:arrived?'#123047':'#526779',weight:arrived?.62:.55,opacity:visible?.98:0,fillOpacity:visible?(arrived?.96:.25):0});layer.setRadius(zoom>=7?3.6:zoom>=5.5?3:2.35) });}
   window.recalcMunicipalityQuakes=recalcMunicipalityQuakes;window.renderMunicipalityQuakes=renderMunicipalityQuakes;
   fetch('https://geo.maderaojen.me/datasets/jp-municipalities/releases/v1/2026-08-04.1/data.geojson')
     .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
     .then(data=>{
+      muniBoundaryLayer=L.geoJSON(data,{pane:'municipalityBoundaries',style:muniBoundaryStyle,interactive:false}).addTo(map);
       const seen=new Set();
       data.features.forEach(feature=>{
         const p=feature.properties||{},name=muniName(p),center=muniCenter(feature);if(!center||!name)return;
